@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Community Health Connect: clinic services, opening hours, appointment requests and live service status for our community clinics.">
+    <meta name="author" content="Hafiz Abdur Rehman (FA24-ELC-022)">
+    <meta name="theme-color" content="#26337a">
+    <title>Services and Appointments | Community Health Connect</title>
+    <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Skip link: first focusable element, lets keyboard users jump past the navigation -->
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="index.html">
+                <img src="images/logo.svg" alt="" width="40" height="40">
+                <span class="brand-name">Community Health <strong>Connect</strong></span>
+            </a>
+
+            <!-- CSS-only menu toggle for small screens (no JavaScript) -->
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-toggle-label">
+                <span class="hamburger" aria-hidden="true"></span>
+                Menu
+            </label>
+
+            <nav class="main-nav" aria-label="Main">
+                <ul>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#hours">Opening Hours</a></li>
+                    <li><a href="#guide">How to Book</a></li>
+                    <li><a href="#appointment" class="nav-cta">Request Appointment</a></li>
+                    <li><a href="#staff-panel">Staff Panel</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page">
+        <main id="main-content" class="content">
+
+            <!-- ========== Introduction ========== -->
+            <section class="intro" aria-labelledby="intro-title">
+                <figure class="intro-figure">
+                    <picture>
+                        <source type="image/webp"
+                                srcset="images/clinic-480.webp 480w, images/clinic-960.webp 960w"
+                                sizes="(max-width: 480px) 100vw, (max-width: 1024px) 45vw, 420px">
+                        <img src="images/clinic-960.png"
+                             alt="Illustration of the front of a Community Health Connect clinic with an open door and a green cross sign"
+                             width="960" height="640">
+                    </picture>
+                    <figcaption>Our G-9 clinic, open six days a week.</figcaption>
+                </figure>
+
+                <p class="eyebrow">Free and low-cost care for everyone</p>
+                <h1 id="intro-title">Clinic Services and Appointments</h1>
+                <p>
+                    <strong>Community Health Connect</strong> is a non-profit network of three
+                    community clinics. On this page you can see which services are available today,
+                    check our opening hours and send an appointment request. A member of our team
+                    will call you to <em>confirm the time</em> within one working day.
+                </p>
+                <p class="notice">
+                    <strong>In an emergency</strong>, do not use this form. Call <a href="tel:1122">1122</a>
+                    or go to the nearest hospital.
+                </p>
+            </section>
+
+            <!-- ========== Services ========== -->
+            <section id="services" class="services" aria-labelledby="services-title">
+                <h2 id="services-title">Our Services</h2>
+                <p>Every service is free for registered patients. Some services also accept walk-ins.</p>
+
+                <div class="card-grid">
+                    <article class="service-card">
+                        <span class="badge">Walk-in</span>
+                        <h3>General Check-up</h3>
+                        <p>Consultation with a general physician for fever, cough, pain and other common problems.</p>
+                        <p class="card-meta">Average wait: 20 minutes</p>
+                    </article>
+                    <article class="service-card">
+                        <span class="badge badge--appointment">Appointment</span>
+                        <h3>Mother and Child Care</h3>
+                        <p>Pregnancy check-ups, newborn care and growth monitoring for children under five.</p>
+                        <p class="card-meta">Female doctor available</p>
+                    </article>
+                    <article class="service-card">
+                        <span class="badge">Walk-in</span>
+                        <h3>Vaccination</h3>
+                        <p>Routine childhood vaccines and seasonal flu shots. Bring the vaccination card.</p>
+                        <p class="card-meta">No fee</p>
+                    </article>
+                    <article class="service-card">
+                        <span class="badge badge--appointment">Appointment</span>
+                        <h3>Diabetes and Blood Pressure</h3>
+                        <p>Regular monitoring, medicine review and diet advice for long-term conditions.</p>
+                        <p class="card-meta">Monthly follow-up</p>
+                    </article>
+                    <article class="service-card">
+                        <span class="badge badge--appointment">Appointment</span>
+                        <h3>Dental Care</h3>
+                        <p>Check-ups, cleaning and simple fillings by a visiting dentist.</p>
+                        <p class="card-meta">Tuesdays and Thursdays</p>
+                    </article>
+                    <article class="service-card">
+                        <span class="badge">Walk-in</span>
+                        <h3>Basic Lab Tests</h3>
+                        <p>Blood sugar, haemoglobin and urine tests with results on the same day.</p>
+                        <p class="card-meta">Results in 2 hours</p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- ========== Opening hours ========== -->
+            <section id="hours" class="hours" aria-labelledby="hours-title">
+                <h2 id="hours-title">Opening Hours and Locations</h2>
+
+                <div class="table-wrap" tabindex="0" role="region" aria-labelledby="hours-caption">
+                    <table class="hours-table">
+                        <caption id="hours-caption">Clinic opening hours (Pakistan Standard Time)</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Clinic</th>
+                                <th scope="col">Monday to Friday</th>
+                                <th scope="col">Saturday</th>
+                                <th scope="col">Sunday</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">G-9 Community Clinic</th>
+                                <td>8:00 AM to 6:00 PM</td>
+                                <td>9:00 AM to 2:00 PM</td>
+                                <td>Closed</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Saidpur Village Clinic</th>
+                                <td>9:00 AM to 4:00 PM</td>
+                                <td>9:00 AM to 1:00 PM</td>
+                                <td>Closed</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Bhara Kahu Clinic</th>
+                                <td>8:00 AM to 8:00 PM</td>
+                                <td>8:00 AM to 8:00 PM</td>
+                                <td>10:00 AM to 2:00 PM</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Where to Find Us</h3>
+                <dl class="locations">
+                    <dt>G-9 Community Clinic</dt>
+                    <dd>Street 14, G-9/2, Islamabad. Ground floor, wheelchair ramp at the front.</dd>
+                    <dt>Saidpur Village Clinic</dt>
+                    <dd>Near the village mosque, Saidpur Road, Islamabad.</dd>
+                    <dt>Bhara Kahu Clinic</dt>
+                    <dd>Main Murree Road, Bhara Kahu. Parking available behind the building.</dd>
+                </dl>
+            </section>
+
+            <!-- ========== Booking guide with video ========== -->
+            <section id="guide" class="guide" aria-labelledby="guide-title">
+                <h2 id="guide-title">How to Book an Appointment</h2>
+                <div class="guide-layout">
+                    <ol class="steps">
+                        <li>Choose the service you need from the list above.</li>
+                        <li>Fill in the appointment request form below.</li>
+                        <li>Wait for our call to confirm the date and time.</li>
+                        <li>Bring your CNIC or B-form and any old prescriptions.</li>
+                    </ol>
+                    <figure class="video-figure">
+                        <video controls playsinline preload="metadata" width="640" height="360"
+                               poster="images/video-poster.jpg">
+                            <source src="media/booking-guide.webm" type="video/webm">
+                            <source src="media/booking-guide.mp4" type="video/mp4">
+                            <track kind="captions" src="media/booking-guide-en.vtt" srclang="en" label="English" default>
+                            <p>Your browser cannot play this video.
+                               <a href="media/booking-guide.mp4">Download the booking guide video</a> instead.</p>
+                        </video>
+                        <figcaption>A 15-second guide to booking (silent, with captions).</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <!-- ========== Appointment form ========== -->
+            <section id="appointment" class="appointment" aria-labelledby="appointment-title">
+                <h2 id="appointment-title">Request an Appointment</h2>
+                <p>Fields marked with <span class="req" aria-hidden="true">*</span> are required.
+                   We use your details only to arrange your visit. Read our
+                   <a href="privacy-policy.html">privacy policy</a>.</p>
+
+                <form class="appt-form" action="https://example.org/chc/appointments" method="post">
+                    <fieldset>
+                        <legend>Patient details</legend>
+                        <div class="field">
+                            <label for="patient-name">Full name <span class="req" aria-hidden="true">*</span></label>
+                            <input type="text" id="patient-name" name="patient_name"
+                                   autocomplete="name" minlength="3" maxlength="60" required>
+                        </div>
+                        <div class="field">
+                            <label for="patient-age">Age in years <span class="req" aria-hidden="true">*</span></label>
+                            <input type="number" id="patient-age" name="patient_age"
+                                   min="0" max="110" required>
+                        </div>
+                        <div class="field">
+                            <label for="patient-phone">Mobile number <span class="req" aria-hidden="true">*</span></label>
+                            <input type="tel" id="patient-phone" name="patient_phone"
+                                   autocomplete="tel" placeholder="03001234567"
+                                   pattern="03[0-9]{9}" aria-describedby="phone-hint" required>
+                            <small id="phone-hint" class="hint">11 digits starting with 03, no spaces or dashes.</small>
+                        </div>
+                        <div class="field">
+                            <label for="patient-email">Email (optional)</label>
+                            <input type="email" id="patient-email" name="patient_email" autocomplete="email">
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Visit details</legend>
+                        <div class="field">
+                            <label for="service">Service <span class="req" aria-hidden="true">*</span></label>
+                            <select id="service" name="service" required>
+                                <option value="">Select a service</option>
+                                <option value="general">General Check-up</option>
+                                <option value="mother-child">Mother and Child Care</option>
+                                <option value="vaccination">Vaccination</option>
+                                <option value="chronic">Diabetes and Blood Pressure</option>
+                                <option value="dental">Dental Care</option>
+                                <option value="lab">Basic Lab Tests</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="visit-date">Preferred date <span class="req" aria-hidden="true">*</span></label>
+                            <input type="date" id="visit-date" name="visit_date"
+                                   min="2026-10-12" max="2026-12-31" aria-describedby="date-hint" required>
+                            <small id="date-hint" class="hint">Between 12 October and 31 December 2026.</small>
+                        </div>
+
+                        <fieldset class="choice-group">
+                            <legend>Preferred clinic <span class="req" aria-hidden="true">*</span></legend>
+                            <div class="choice">
+                                <input type="radio" id="clinic-g9" name="clinic" value="g9" required>
+                                <label for="clinic-g9">G-9 Community Clinic</label>
+                            </div>
+                            <div class="choice">
+                                <input type="radio" id="clinic-saidpur" name="clinic" value="saidpur">
+                                <label for="clinic-saidpur">Saidpur Village Clinic</label>
+                            </div>
+                            <div class="choice">
+                                <input type="radio" id="clinic-bharakahu" name="clinic" value="bharakahu">
+                                <label for="clinic-bharakahu">Bhara Kahu Clinic</label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="choice-group">
+                            <legend>I may need</legend>
+                            <div class="choice">
+                                <input type="checkbox" id="need-wheelchair" name="needs" value="wheelchair">
+                                <label for="need-wheelchair">Wheelchair access</label>
+                            </div>
+                            <div class="choice">
+                                <input type="checkbox" id="need-female" name="needs" value="female-doctor">
+                                <label for="need-female">A female doctor</label>
+                            </div>
+                            <div class="choice">
+                                <input type="checkbox" id="need-language" name="needs" value="interpreter">
+                                <label for="need-language">A Pashto or Punjabi speaking staff member</label>
+                            </div>
+                        </fieldset>
+
+                        <div class="field field--full">
+                            <label for="reason">Reason for visit</label>
+                            <textarea id="reason" name="reason" rows="4" maxlength="500"
+                                      aria-describedby="reason-hint"></textarea>
+                            <small id="reason-hint" class="hint">Optional. Up to 500 characters.</small>
+                        </div>
+                    </fieldset>
+
+                    <div class="field consent">
+                        <input type="checkbox" id="consent" name="consent" value="yes" required>
+                        <label for="consent">I agree that the clinic may call me about this request. <span class="req" aria-hidden="true">*</span></label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn">Send Request</button>
+                        <button type="reset" class="btn btn--ghost">Clear Form</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <!-- ========== Staff-facing panel ========== -->
+        <aside id="staff-panel" class="staff-panel" aria-labelledby="staff-title">
+            <h2 id="staff-title">Staff Panel: Service Status</h2>
+            <p class="staff-note">For clinic staff. Last updated today at 10:30 AM by the front desk.</p>
+
+            <section aria-labelledby="status-title">
+                <h3 id="status-title">Today's availability</h3>
+                <div class="table-wrap">
+                    <table class="status-table">
+                        <caption>Service status at G-9 Community Clinic</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Service</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Slots left</th>
+                                <th scope="col">Staff on duty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row" data-label="Service">General Check-up</th>
+                                <td data-label="Status"><span class="status status--open">Open</span></td>
+                                <td data-label="Slots left">14</td>
+                                <td data-label="Staff on duty">Dr. Sana (GP)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" data-label="Service">Mother and Child Care</th>
+                                <td data-label="Status"><span class="status status--limited">Limited</span></td>
+                                <td data-label="Slots left">3</td>
+                                <td data-label="Staff on duty">Dr. Ayesha (Gynae)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" data-label="Service">Vaccination</th>
+                                <td data-label="Status"><span class="status status--open">Open</span></td>
+                                <td data-label="Slots left">22</td>
+                                <td data-label="Staff on duty">Nurse Hina</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" data-label="Service">Diabetes and Blood Pressure</th>
+                                <td data-label="Status"><span class="status status--limited">Limited</span></td>
+                                <td data-label="Slots left">5</td>
+                                <td data-label="Staff on duty">Dr. Imran (Physician)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" data-label="Service">Dental Care</th>
+                                <td data-label="Status"><span class="status status--closed">Closed</span></td>
+                                <td data-label="Slots left">0</td>
+                                <td data-label="Staff on duty">Not today</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" data-label="Service">Basic Lab Tests</th>
+                                <td data-label="Status"><span class="status status--open">Open</span></td>
+                                <td data-label="Slots left">9</td>
+                                <td data-label="Staff on duty">Lab Tech Bilal</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section aria-labelledby="update-title">
+                <h3 id="update-title">Update a service</h3>
+                <form class="staff-form" action="https://example.org/chc/staff/status" method="post">
+                    <label for="staff-service">Service</label>
+                    <select id="staff-service" name="service" required>
+                        <option value="">Choose a service</option>
+                        <option value="general">General Check-up</option>
+                        <option value="mother-child">Mother and Child Care</option>
+                        <option value="vaccination">Vaccination</option>
+                        <option value="chronic">Diabetes and Blood Pressure</option>
+                        <option value="dental">Dental Care</option>
+                        <option value="lab">Basic Lab Tests</option>
+                    </select>
+
+                    <fieldset class="status-choice">
+                        <legend>New status</legend>
+                        <input type="radio" id="st-open" name="status" value="open" required>
+                        <label for="st-open">Open</label>
+                        <input type="radio" id="st-limited" name="status" value="limited">
+                        <label for="st-limited">Limited</label>
+                        <input type="radio" id="st-closed" name="status" value="closed">
+                        <label for="st-closed">Closed</label>
+                    </fieldset>
+
+                    <label for="staff-slots">Slots left (0 to 50)</label>
+                    <input type="number" id="staff-slots" name="slots" min="0" max="50" required>
+
+                    <label for="staff-code">Staff code (format: CHC-1234)</label>
+                    <input type="text" id="staff-code" name="staff_code"
+                           pattern="CHC-[0-9]{4}" autocomplete="off" required>
+
+                    <button type="submit" class="btn btn--small">Save Status</button>
+                </form>
+            </section>
+        </aside>
+    </div>
+
+    <!-- Fixed help button: always reachable, even while scrolling the long form -->
+    <a id="call-us" class="call-button" href="tel:+92511234567">
+        <span aria-hidden="true">&#9742;</span> Call the clinic
+    </a>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <p>&copy; 2026 Community Health Connect. A non-profit clinic network.</p>
+            <ul class="footer-links">
+                <li><a href="privacy-policy.html">Privacy policy</a></li>
+                <li><a href="https://www.who.int/health-topics/primary-health-care" target="_blank" rel="noopener">WHO: primary health care (opens in a new tab)</a></li>
+                <li><a href="https://www.nih.org.pk/" target="_blank" rel="noopener">National Institute of Health, Pakistan (opens in a new tab)</a></li>
+            </ul>
+            <p class="credit">Interface designed by Hafiz Abdur Rehman, FA24-ELC-022, for CSC336 Web Technologies.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,1066 @@
+/* =====================================================================
+   Community Health Connect - Services and Appointments
+   Author: Hafiz Abdur Rehman (FA24-ELC-022)
+   Approach: mobile-first. Base rules target phones (<= 480px), then
+   min-width media queries add tablet (481px-1024px) and desktop (> 1024px).
+   Sections:
+     1. Custom properties (design tokens)
+     2. Base and inheritance
+     3. Utilities and accessibility helpers
+     4. Header and navigation (sticky, CSS-only menu)
+     5. Page layout (main + staff panel)
+     6. Intro and floated figure
+     7. Service cards
+     8. Tables and description list
+     9. Booking guide and video
+    10. Appointment form
+    11. Staff panel
+    12. Fixed call button and footer
+    13. Animations
+    14. Media queries (tablet, desktop)
+    15. Feature queries and user preferences
+   ===================================================================== */
+
+
+/* ---------- 1. Custom properties ---------- */
+:root {
+    --clr-primary: #26337a;        /* ink indigo: 11.3:1 contrast on white */
+    --clr-primary-dark: #161f4d;
+    --clr-primary-light: #e8ebf8;
+    --clr-accent: #e4572e;         /* coral: decoration only, never for text on white */
+    --clr-text: #1d2233;
+    --clr-muted: #4a5068;          /* 7.6:1 on white */
+    --clr-bg: #f7f5f0;
+    --clr-surface: #ffffff;
+    --clr-border: #d5d8e6;
+    --clr-open: #17703a;
+    --clr-limited: #8a5a00;
+    --clr-closed: #b3261e;
+    --clr-focus: #ffbf47;
+
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial, sans-serif;
+    --font-heading: "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif;
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 1rem;
+    --space-4: 1.5rem;
+    --space-5: 2.5rem;
+
+    --radius: 0.3rem;
+    --shadow-sm: 0 1px 3px rgba(22, 31, 77, 0.14);
+    --shadow-md: 0 8px 22px rgba(22, 31, 77, 0.2);
+    --header-height: 4rem;
+    --content-max: 75rem;
+}
+
+
+/* ---------- 2. Base and inheritance ---------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;            /* width includes padding and border */
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-height) + 1rem);  /* anchors are not hidden under the sticky header */
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-body);     /* inherited by every element below */
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--clr-text);
+    background-color: var(--clr-bg);
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-heading);
+    line-height: 1.25;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--clr-primary-dark);
+}
+
+h1 {
+    font-size: clamp(1.75rem, 5vw, 2.6rem);
+    margin: 0 0 var(--space-3);
+}
+
+h2 {
+    font-size: clamp(1.4rem, 3.5vw, 1.9rem);
+    margin: 0 0 var(--space-3);
+}
+
+h3 {
+    font-size: 1.15rem;
+    margin: var(--space-4) 0 var(--space-2);
+}
+
+img,
+video {
+    display: block;                    /* removes the inline gap under images */
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    color: var(--clr-primary);
+    text-underline-offset: 0.15em;
+}
+
+a:hover {
+    color: var(--clr-primary-dark);
+    text-decoration-thickness: 2px;
+}
+
+/* Form controls do not inherit font by default, so we force it */
+input,
+select,
+textarea,
+button {
+    font: inherit;
+    color: inherit;
+}
+
+/* :where() has zero specificity, so these list resets are easy to override later */
+:where(.main-nav ul, .footer-links) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ---------- 3. Utilities and accessibility helpers ---------- */
+
+/* One visible focus style for every interactive element */
+:focus-visible {
+    outline: 3px solid var(--clr-focus);
+    outline-offset: 3px;
+}
+
+/* Skip link: positioned off-screen until it receives keyboard focus */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: var(--space-3);
+    z-index: 200;
+    padding: var(--space-2) var(--space-3);
+    background: var(--clr-primary-dark);
+    color: #ffffff;
+    font-weight: 700;
+    border-radius: 0 0 var(--radius) var(--radius);
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    color: #ffffff;
+}
+
+.req {
+    color: var(--clr-closed);
+    font-weight: 700;
+}
+
+.hint {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--clr-muted);
+}
+
+
+/* ---------- 4. Header and navigation ---------- */
+.site-header {
+    position: sticky;                  /* stays visible while scrolling; stays in normal flow */
+    top: 0;
+    z-index: 100;                      /* above cards (z 1) and the call button (z 50) */
+    background-color: #ffffff;
+    border-bottom: 4px solid var(--clr-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+    position: relative;                /* containing block for the dropdown menu on phones */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--content-max);
+    min-height: var(--header-height);
+    margin: 0 auto;
+    padding: 0 var(--space-3);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--clr-primary-dark);
+    text-decoration: none;
+}
+
+.brand:hover {
+    color: var(--clr-primary);
+}
+
+.brand-name {
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+}
+
+/* The checkbox drives the menu; it is visually hidden but still focusable */
+.nav-toggle {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.nav-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    color: var(--clr-primary-dark);
+    font-weight: 600;
+    border: 2px solid var(--clr-primary);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.nav-toggle:focus-visible + .nav-toggle-label {
+    outline: 3px solid var(--clr-focus);
+    outline-offset: 2px;
+}
+
+/* Three-line icon drawn with one span and two pseudo-elements */
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+    display: block;
+    width: 1.25rem;
+    height: 2px;
+    background: var(--clr-primary);
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.hamburger {
+    position: relative;
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: "";
+    position: absolute;
+    left: 0;
+}
+
+.hamburger::before { top: -6px; }
+.hamburger::after  { top: 6px; }
+
+/* Turn the icon into an X when the menu is open */
+.nav-toggle:checked + .nav-toggle-label .hamburger {
+    background: transparent;
+}
+
+.nav-toggle:checked + .nav-toggle-label .hamburger::before {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.nav-toggle:checked + .nav-toggle-label .hamburger::after {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Phone menu: hidden until the checkbox is checked */
+.main-nav {
+    display: none;
+    width: 100%;
+    padding-bottom: var(--space-3);
+}
+
+.nav-toggle:checked ~ .main-nav {
+    display: block;
+    animation: drop-in 0.25s ease-out;
+}
+
+.main-nav a {
+    display: block;
+    padding: var(--space-2) var(--space-3);
+    color: var(--clr-primary-dark);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius);
+    transition: background-color 0.2s ease;
+}
+
+.main-nav a:hover,
+.main-nav a:focus-visible {
+    background-color: var(--clr-primary-light);
+    color: var(--clr-primary-dark);
+}
+
+.main-nav .nav-cta {
+    background-color: var(--clr-primary);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.main-nav .nav-cta:hover,
+.main-nav .nav-cta:focus-visible {
+    background-color: var(--clr-primary-dark);
+    color: #ffffff;
+}
+
+
+/* ---------- 5. Page layout ---------- */
+.page {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-3);
+}
+
+.content > section,
+.staff-panel {
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius);
+    padding: var(--space-4) var(--space-3);
+    margin-bottom: var(--space-4);
+    box-shadow: var(--shadow-sm);
+}
+
+
+/* ---------- 6. Intro and floated figure ---------- */
+.intro {
+    display: flow-root;                /* contains the floated figure (modern clearfix) */
+    color: #ffffff;
+}
+
+/* ".content > section" (0,1,1) sets a background shorthand that wipes a plain .intro
+   background, so the hero rule needs two classes (0,2,0) to win without !important */
+.content > .intro {
+    background-color: var(--clr-primary);
+    background-image: linear-gradient(135deg, var(--clr-primary-dark) 0%, #34469b 100%);
+    border-left: 8px solid var(--clr-accent);
+}
+
+.intro h1 {
+    color: #ffffff;
+}
+
+.intro-figure {
+    margin: 0 0 var(--space-3);
+}
+
+.intro-figure img {
+    width: 100%;
+    border-radius: var(--radius);
+    border: 3px solid #ffffff;
+    box-shadow: var(--shadow-md);
+}
+
+figcaption {
+    font-size: 0.85rem;
+    color: var(--clr-muted);
+    margin-top: var(--space-1);
+}
+
+.intro figcaption {
+    color: #dfe4fb;
+}
+
+.eyebrow {
+    margin: 0 0 var(--space-1);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffd2c2;
+}
+
+.notice {
+    clear: both;                       /* starts below the floated image on tablet */
+    padding: var(--space-3);
+    color: var(--clr-text);
+    background: #fff4e5;
+    border-left: 5px solid var(--clr-accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+
+/* ---------- 7. Service cards ---------- */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));   /* as many columns as fit */
+    gap: var(--space-3);
+}
+
+.service-card {
+    position: relative;                /* containing block for the absolute badge */
+    z-index: 1;
+    padding: var(--space-4) var(--space-3) var(--space-3);
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-left: 6px solid var(--clr-accent);
+    border-radius: var(--radius);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.service-card h3 {
+    margin-top: var(--space-2);
+    padding-right: 6.5rem;             /* keeps long titles clear of the badge */
+}
+
+.service-card p {
+    margin: 0 0 var(--space-2);
+}
+
+.service-card:hover,
+.service-card:focus-within {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.badge {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--clr-open);
+    background: #e6f4ea;
+    border: 1px solid #b7dfc2;
+    border-radius: 0.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.badge--appointment {
+    color: var(--clr-primary-dark);
+    background: var(--clr-primary-light);
+    border-color: #c3c9ea;
+}
+
+.card-meta {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--clr-muted);
+}
+
+.card-meta::before {
+    content: "\2022  ";               /* decorative bullet, not read as content */
+    color: var(--clr-accent);
+}
+
+
+/* ---------- 8. Tables and description list ---------- */
+.table-wrap {
+    max-width: 100%;
+    overflow-x: auto;                  /* wide tables scroll inside their box, not the page */
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius);
+}
+
+table {
+    width: 100%;
+    min-width: 32rem;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+caption {
+    padding: var(--space-2) var(--space-3);
+    font-weight: 700;
+    text-align: left;
+    color: var(--clr-primary-dark);
+    background: var(--clr-primary-light);
+}
+
+th,
+td {
+    padding: var(--space-2) var(--space-3);
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--clr-border);
+}
+
+thead th {
+    color: #ffffff;
+    background-color: var(--clr-primary);
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f3f4fa;
+}
+
+tbody tr:hover {
+    background-color: var(--clr-primary-light);
+}
+
+.locations dt {
+    font-weight: 700;
+    color: var(--clr-primary-dark);
+}
+
+.locations dd {
+    margin: 0 0 var(--space-3);
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--clr-primary-light);
+}
+
+
+/* ---------- 9. Booking guide and video ---------- */
+.guide-layout {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.steps {
+    counter-reset: step;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.steps li {
+    position: relative;
+    padding: var(--space-2) 0 var(--space-2) 2.75rem;
+    min-height: 2.5rem;
+}
+
+.steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.35rem;
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
+    font-weight: 700;
+    color: #ffffff;
+    background: var(--clr-primary);
+    border-radius: var(--radius);
+}
+
+.video-figure {
+    margin: 0;
+}
+
+.video-figure video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000000;
+    border-radius: var(--radius);
+}
+
+
+/* ---------- 10. Appointment form ---------- */
+fieldset {
+    margin: 0 0 var(--space-4);
+    padding: var(--space-3);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius);
+}
+
+legend {
+    padding: 0 var(--space-2);
+    font-weight: 700;
+    color: var(--clr-primary-dark);
+}
+
+.field {
+    margin-bottom: var(--space-3);
+}
+
+.field > label {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;               /* touch target of at least 44px */
+    padding: var(--space-2) var(--space-3);
+    background: #ffffff;
+    border: 2px solid #8fa3a6;
+    border-radius: calc(var(--radius) / 1.5);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+textarea {
+    min-height: 7rem;
+    max-height: 18rem;
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--clr-primary);
+    box-shadow: 0 0 0 4px rgba(38, 51, 122, 0.2);
+}
+
+.choice-group {
+    border-style: dashed;
+}
+
+.choice {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) 0;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin: 0;
+    accent-color: var(--clr-primary);   /* CSS3 control colouring, ignored by old browsers */
+    flex-shrink: 0;
+}
+
+.consent {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+}
+
+.consent input {
+    margin-top: 0.3rem;
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+/* Base button: one class, so modifiers can override it with equal specificity */
+.btn {
+    display: inline-block;
+    min-height: 2.75rem;
+    padding: var(--space-2) var(--space-4);
+    font-weight: 700;
+    color: #ffffff;
+    background-color: var(--clr-primary);
+    border: 2px solid var(--clr-primary-dark);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 0 var(--clr-accent);   /* flat coral edge instead of a soft shadow */
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--clr-primary-dark);
+    box-shadow: 0 2px 0 var(--clr-accent);
+    transform: translateY(2px);
+}
+
+.btn:active {
+    box-shadow: none;
+    transform: translateY(4px);
+}
+
+/* Modifier comes AFTER .btn with the same specificity (0,1,0), so source order makes it win */
+.btn--ghost {
+    color: var(--clr-primary-dark);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.btn--ghost:hover {
+    color: var(--clr-primary-dark);
+    background-color: var(--clr-primary-light);
+    box-shadow: none;
+    transform: none;
+}
+
+.btn--small {
+    min-height: 2.5rem;
+    padding: var(--space-1) var(--space-3);
+}
+
+/* Fallback validation feedback for older browsers: fields that have a placeholder turn red
+   only once the user has typed something (the placeholder is no longer shown) */
+input[placeholder]:not(:placeholder-shown):invalid {
+    border-color: var(--clr-closed);
+}
+
+
+/* ---------- 11. Staff panel ---------- */
+.staff-panel {
+    border-left: 6px solid var(--clr-accent);
+    background-image: linear-gradient(180deg, #fff4f0 0%, #ffffff 30%);
+}
+
+.staff-panel h2 {
+    font-size: 1.4rem;
+}
+
+.staff-note {
+    font-size: 0.9rem;
+    color: var(--clr-muted);
+}
+
+.status-table {
+    font-size: 0.9rem;
+}
+
+.status {
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+}
+
+/* Coloured dot + text label: status is never shown by colour alone */
+.status::before {
+    content: "";
+    display: inline-block;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.status--open    { color: var(--clr-open); }
+.status--limited { color: var(--clr-limited); }
+.status--closed  { color: var(--clr-closed); }
+
+.status--open::before {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.staff-form {
+    display: grid;
+    gap: var(--space-2);
+}
+
+.staff-form > label {
+    font-weight: 600;
+}
+
+.status-choice {
+    margin: var(--space-2) 0;
+    padding: var(--space-2) var(--space-3);
+}
+
+.status-choice label {
+    display: inline;
+    margin-right: var(--space-3);
+}
+
+.status-choice input {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: var(--space-1);
+}
+
+
+/* ---------- 12. Fixed call button and footer ---------- */
+#call-us {
+    position: fixed;                   /* stays on screen while the long form scrolls */
+    right: var(--space-3);
+    bottom: var(--space-3);
+    z-index: 50;                       /* above content, below the sticky header menu */
+    padding: var(--space-2) var(--space-3);
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    background-color: var(--clr-closed);
+    border: 2px solid #ffffff;
+    border-radius: var(--radius);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease;
+}
+
+#call-us:hover,
+#call-us:focus-visible {
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.site-footer {
+    position: static;                  /* explicit: the footer stays in normal document flow */
+    margin-top: var(--space-5);
+    padding: var(--space-4) var(--space-3) 5rem;   /* bottom space so the fixed button never covers text */
+    color: #e6f0f0;
+    background-color: var(--clr-primary-dark);
+}
+
+.footer-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+}
+
+.site-footer a {
+    color: #ffffff;
+}
+
+.footer-links li {
+    margin-bottom: var(--space-1);
+}
+
+.credit {
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+
+.simple-page {
+    max-width: 45rem;
+    margin: var(--space-4) auto;
+    padding: 0 var(--space-3);
+}
+
+
+/* ---------- 13. Animations ---------- */
+@keyframes pulse {
+    0%, 100% { transform: scale(1);   opacity: 1; }
+    50%      { transform: scale(1.4); opacity: 0.55; }
+}
+
+@keyframes drop-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ---------- 14a. Small screens only (<= 480px) ---------- */
+@media (max-width: 480px) {
+    .brand-name {
+        font-size: 0.8rem;             /* brand and Menu button fit on one row at 360px */
+        line-height: 1.2;
+    }
+
+    .nav-toggle-label {
+        padding: var(--space-1) var(--space-2);
+    }
+
+    .page {
+        padding: var(--space-2);
+    }
+
+    /* The staff table becomes a list of cards: each cell shows its own header via data-label */
+    .status-table {
+        min-width: 0;
+    }
+
+    .status-table caption {
+        display: block;
+    }
+
+    .status-table thead {
+        display: none;                 /* headers are repeated inside each cell instead */
+    }
+
+    .status-table,
+    .status-table tbody,
+    .status-table tr,
+    .status-table th,
+    .status-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .status-table tr {
+        margin: var(--space-2);
+        width: auto;
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        background: #ffffff;
+    }
+
+    .status-table th,
+    .status-table td {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--space-3);
+        border-bottom: 1px dashed var(--clr-border);
+    }
+
+    .status-table tr > :last-child {
+        border-bottom: none;
+    }
+
+    .status-table [data-label]::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--clr-muted);
+    }
+
+    .form-actions .btn {
+        width: 100%;                   /* full-width buttons are easier to tap */
+    }
+
+    #call-us {
+        right: var(--space-2);
+        bottom: var(--space-2);
+        font-size: 0.9rem;
+    }
+}
+
+
+/* ---------- 14b. Tablet (481px - 1024px) ---------- */
+@media (min-width: 481px) {
+    .content > section,
+    .staff-panel {
+        padding: var(--space-4);
+    }
+
+    /* Image floats to the right and text wraps around it */
+    .intro-figure {
+        float: right;
+        width: 45%;
+        margin: 0 0 var(--space-3) var(--space-4);
+    }
+
+    /* Two-column form: short fields side by side */
+    .appt-form > fieldset {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: var(--space-4);
+    }
+
+    .appt-form > fieldset > legend {
+        grid-column: 1 / -1;
+    }
+
+    .field--full,
+    .choice-group {
+        grid-column: 1 / -1;
+    }
+
+    .guide-layout {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+}
+
+
+/* ---------- 14c. Desktop (> 1024px) ---------- */
+@media (min-width: 1025px) {
+    /* Horizontal navigation: hide the toggle, always show the links */
+    .nav-toggle-label {
+        display: none;
+    }
+
+    .main-nav {
+        display: block;
+        width: auto;
+        padding: 0;
+    }
+
+    .main-nav ul {
+        display: flex;
+        gap: var(--space-1);
+    }
+
+    /* Main content and staff panel side by side */
+    .page {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 24rem;
+        gap: var(--space-4);
+        align-items: start;
+        padding: var(--space-4);
+    }
+
+    /* Panel sticks below the header and scrolls on its own if it is taller than the screen */
+    .staff-panel {
+        position: sticky;
+        top: calc(var(--header-height) + var(--space-3));
+        max-height: calc(100vh - var(--header-height) - 2rem);
+        overflow-y: auto;
+    }
+
+    .staff-panel .table-wrap {
+        overflow-x: auto;               /* safety net if a long staff name is wider than the panel */
+        border: none;
+    }
+
+    .status-table {
+        min-width: 0;
+        font-size: 0.82rem;
+    }
+
+    .status-table th,
+    .status-table td {
+        padding: var(--space-2);
+    }
+
+    .intro-figure {
+        width: 40%;
+    }
+
+    .site-footer {
+        padding-bottom: var(--space-4);
+    }
+}
+
+
+/* ---------- 15. Feature queries and user preferences ---------- */
+
+/* Frosted header only where backdrop-filter works; everyone else keeps the solid colour */
+@supports ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+    .site-header {
+        background-color: rgba(255, 255, 255, 0.94);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+    }
+}
+
+/* Newer :user-invalid shows errors only after the user interacts, including on empty required fields */
+@supports selector(:user-invalid) {
+    input:user-invalid,
+    select:user-invalid,
+    textarea:user-invalid {
+        border-color: var(--clr-closed);
+        background-color: #fdf1f0;
+    }
+}
+
+/* Old browsers without aspect-ratio: keep the video from collapsing */
+@supports not (aspect-ratio: 16 / 9) {
+    .video-figure video {
+        height: auto;
+        min-height: 12rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;       /* !important is justified: a user setting must win */
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@media print {
+    .site-header,
+    .call-button,
+    .staff-panel,
+    video {
+        display: none;
+    }
+}
